@@ -17,3 +17,13 @@ mybatis-plus:
     call-setters-on-nulls: true
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+customer:
+  product:
+    status:
+      - 初始
+      - 中试
+      - 试产
+      - 量产
+      - 即将作废
+      - 已作废
+      - 已退市

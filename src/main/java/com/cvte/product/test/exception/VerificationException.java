@@ -4,7 +4,7 @@ package com.cvte.product.test.exception;
  * @author 聂裴涵
  * @date 2022/8/5 3:27 PM
  */
-public class VerificationException extends Exception{
+public class VerificationException extends RuntimeException{
     private Integer code;
     private Object msg;
 

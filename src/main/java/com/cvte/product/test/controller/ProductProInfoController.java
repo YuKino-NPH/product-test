@@ -1,18 +1,16 @@
 package com.cvte.product.test.controller;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cvte.product.test.Vo.ProductProInfoVo;
 import com.cvte.product.test.Vo.ResultVo;
-import com.cvte.product.test.entity.ProductProInfoEntity;
+import com.cvte.product.test.common.MyPage;
+
+import com.cvte.product.test.exception.VerificationException;
 import com.cvte.product.test.service.ProductProInfoService;
-import com.cvte.product.test.utils.HttpServletRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * <p>
@@ -23,20 +21,67 @@ import java.util.List;
  * @since 2022-08-08
  */
 @RestController
-@RequestMapping("/product-pro-info")
+@RequestMapping("/product-pro-info/product")
 public class ProductProInfoController {
     @Autowired
     ProductProInfoService productProInfoService;
-    @GetMapping("/product")
-    public ResultVo getProductAll(){
-        IPage<ProductProInfoEntity> proInfoEntityIPage = productProInfoService.getProductAll();
-        return ResultVo.ok().put(proInfoEntityIPage);
+    /**
+     * @description: 查询所有的产品信息，并完成分类
+     * @author: 聂裴涵
+     * @date: 2022/8/9 9:57 AM
+     * @return: com.cvte.product.test.Vo.ResultVo
+     **/
+    @GetMapping()
+    public ResultVo getProductAll(@RequestParam(value = "page",defaultValue = "1") Integer page,@RequestParam(value = "keyword",defaultValue = "")String keyword,
+                                  @RequestParam(value="pageSize",defaultValue = "10") Integer pageSize,@RequestParam(value = "orderBy",defaultValue = "pro_id") String orderBy,
+                                  @RequestParam(value="order",defaultValue = "ASC") String order){
+        MyPage<ProductProInfoVo> proInfoVoPage = productProInfoService.getProductAll(page, pageSize, keyword, orderBy, order);
+        return ResultVo.ok().put(proInfoVoPage);
+    }
+    /**
+     * @description: 根据产品ID查询产品信息
+     * @author: 聂裴涵
+     * @date: 2022/8/9 9:56 AM
+     * @return: com.cvte.product.test.Vo.ResultVo
+     **/
+    @GetMapping("/{proId}")
+    public ResultVo getProductById(@PathVariable("proId") String proId){
+        ProductProInfoVo productProInfoVo=productProInfoService.getProductById(proId);
+        return ResultVo.ok().put(productProInfoVo);
     }
 
-    @PostMapping("/product")
+    /**
+     * @description: 新增产品信息
+     * @author: 聂裴涵
+     * @date: 2022/8/9 9:19 AM
+     * @return: com.cvte.product.test.Vo.ResultVo
+     **/
+    @PostMapping()
     public ResultVo insertProduct(@RequestBody ProductProInfoVo productProInfoVo, HttpServletRequest request){
         productProInfoService.insertProduct(productProInfoVo, productProInfoVo.getUpdHost());
         return ResultVo.ok();
+    }
+    /**
+     * @description: 根据产品ID逻辑删除产品信息
+     * @author: 聂裴涵
+     * @date: 2022/8/9 9:34 AM
+     * @return: com.cvte.product.test.Vo.ResultVo
+     **/
+    @DeleteMapping("/{proId}")
+    public ResultVo deleteProductById(@PathVariable("proId") String proId) throws VerificationException {
+        productProInfoService.deleteProductByProId(proId);
+        return ResultVo.ok();
+    }
+    /**
+     * @description: 根据产品ID，修改产品信息
+     * @author: 聂裴涵
+     * @date: 2022/8/9 9:58 AM
+     * @return: com.cvte.product.test.Vo.ResultVo
+     **/
+    @PutMapping("/{proId}")
+    public ResultVo updateProductById(@PathVariable("proId") String proId,@RequestBody ProductProInfoVo productProInfoVo){
+        ProductProInfoVo newProductProInfoVo=productProInfoService.updateProductByProId(proId,productProInfoVo);
+        return ResultVo.ok().put(newProductProInfoVo);
     }
 
 

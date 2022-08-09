@@ -1,11 +1,12 @@
 package com.cvte.product.test.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cvte.product.test.Vo.ProductProInfoVo;
+import com.cvte.product.test.common.MyPage;
 import com.cvte.product.test.entity.ProductProInfoEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
+import com.cvte.product.test.exception.VerificationException;
 
 /**
  * <p>
@@ -22,7 +23,7 @@ public interface ProductProInfoService extends IService<ProductProInfoEntity> {
      * @date: 2022/8/8 2:54 PM
      * @return: com.baomidou.mybatisplus.core.metadata.IPage<com.cvte.product.test.entity.ProductProInfoEntity>
      **/
-    IPage<ProductProInfoEntity> getProductAll();
+    MyPage<ProductProInfoVo> getProductAll(Integer page, Integer pageSize, String keyword, String orderBy, String order);
 
     /**
      * @description: 插入新的产品信息数据
@@ -31,4 +32,10 @@ public interface ProductProInfoService extends IService<ProductProInfoEntity> {
      * @return: void
      **/
     void insertProduct(ProductProInfoVo productProInfoVo,String host);
+
+    void deleteProductByProId(String proId) throws VerificationException;
+
+    ProductProInfoVo updateProductByProId(String proId, ProductProInfoVo productProInfoVo);
+
+    ProductProInfoVo getProductById(String proId);
 }

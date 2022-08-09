@@ -7,8 +7,9 @@ package com.cvte.product.test.enums;
  * @return:
  **/
 public enum ProductProInfoResponseErrorEnum {
-    SELECT_ERROR(4000003,"用户不存在"),INSERT_EXIST_ERROR(4000003,"该产品信息已存在"),
-    DELETE_ERROR(4000003,"用户名错误"),UPDATE_ERROR(4000003,"用户ID错误"),
+    SELECT_ERROR(4000003,"产品不存在"),INSERT_EXIST_ERROR(4000003,"该产品信息已存在"),
+    DELETE_ERROR(4000003,"产品代码错误"),UPDATE_ERROR(4000003,"产品更新失败"),
+    INSERT_LIFECYCLE_ERROR(4000003,"产品生命周期状态错误"),
     INSERT_ERROR(5000001,"系统错误"),
     VERIFICATION_ERROR(4000002,"数据校验失败");
     private Integer code;
