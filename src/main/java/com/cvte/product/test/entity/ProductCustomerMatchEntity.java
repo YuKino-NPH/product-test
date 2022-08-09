@@ -44,11 +44,4 @@ public class ProductCustomerMatchEntity extends BaseEntity implements Serializab
 
     @ApiModelProperty(value = "国家")
     private String country;
-
-    @ApiModelProperty(value = "与产品表关联的ID")
-    private String proModuleId;
-
-
-
-
 }

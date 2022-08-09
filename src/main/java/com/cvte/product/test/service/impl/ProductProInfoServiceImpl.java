@@ -49,19 +49,21 @@ public class ProductProInfoServiceImpl extends ServiceImpl<ProductProInfoMapper,
         if (isLegal) {
             throw new VerificationException(ProductProInfoVerificationErrorEnum.PAGE_DATA_ERROR.getCode(), ProductProInfoVerificationErrorEnum.PAGE_DATA_ERROR.getMsg());
         }
-
+        // 进行模糊查询字符串的拼接工作
         QueryWrapper<ProductProInfoEntity> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasLength(keyword)){
             queryWrapper.like("pro_name",keyword).or().like("pro_model",keyword)
                     .or().like("sale_model",keyword).or().like("pro_type",keyword)
                     .or().like("life_cycle",keyword).or().like("pro_one_category",keyword)
-                    .or().like("pro_two_category)",keyword).or().like("pro_three_category",keyword);
+                    .or().like("pro_two_category",keyword).or().like("pro_three_category",keyword);
         }
         if ("DESC".equals(order)){
             queryWrapper.orderByDesc(orderBy);
         }else{
             queryWrapper.orderByAsc(orderBy);
         }
+
+        // 完成查询以及分类的包装
         Page<ProductProInfoEntity> pages = new Page<>(page, pageSize);
         IPage<ProductProInfoEntity> iPage = this.page(pages, queryWrapper);
 
@@ -98,7 +100,7 @@ public class ProductProInfoServiceImpl extends ServiceImpl<ProductProInfoMapper,
             throw new CustomGlobalException(ProductProInfoResponseErrorEnum.SELECT_ERROR.getCode(), ProductProInfoResponseErrorEnum.SELECT_ERROR.getMsg());
         }
         ProductProInfoVo productProInfoVo = new ProductProInfoVo();
-        BeanUtils.copyProperties(productProInfoEntity, productProInfoEntity);
+        BeanUtils.copyProperties(productProInfoEntity, productProInfoVo);
         return productProInfoVo;
     }
 
@@ -111,7 +113,7 @@ public class ProductProInfoServiceImpl extends ServiceImpl<ProductProInfoMapper,
      **/
     @Override
     public void insertProduct(ProductProInfoVo productProInfoVo, String host) {
-        //判断用户是否存在
+        //判断产品是否存在
         if (productProInfoMapper.selectCount(new QueryWrapper<ProductProInfoEntity>().eq("pro_name", productProInfoVo.getProName())) > 0) {
             throw new CustomGlobalException(ProductProInfoResponseErrorEnum.INSERT_EXIST_ERROR.getCode(), ProductProInfoResponseErrorEnum.INSERT_EXIST_ERROR.getMsg());
         }
@@ -163,14 +165,17 @@ public class ProductProInfoServiceImpl extends ServiceImpl<ProductProInfoMapper,
         if (!StringUtils.hasLength(proId)) {
             throw new VerificationException(ProductProInfoVerificationErrorEnum.PRODUCT_ID_NULL_ERROR.getCode(), ProductProInfoVerificationErrorEnum.PRODUCT_ID_NULL_ERROR.getMsg());
         }
-        ProductProInfoEntity productProInfoEntity = new ProductProInfoEntity();
-        productProInfoVo.setProId(proId);
+        if (StringUtils.hasLength(productProInfoVo.getLifeCycle())&&!commonConfig.getStatus().contains(productProInfoVo.getLifeCycle())){
+            throw new VerificationException(ProductProInfoVerificationErrorEnum.LIFE_CYCLE_ERROR.getCode(), ProductProInfoVerificationErrorEnum.LIFE_CYCLE_ERROR.getMsg());
+        }
+        ProductProInfoEntity productProInfoEntity = productProInfoMapper.selectById(proId);
         BeanUtils.copyProperties(productProInfoVo, productProInfoEntity);
         int changedRows = productProInfoMapper.updateById(productProInfoEntity);
         if (changedRows < 1) {
             throw new CustomGlobalException(ProductProInfoResponseErrorEnum.UPDATE_ERROR.getCode(), ProductProInfoResponseErrorEnum.UPDATE_ERROR.getMsg());
         }
-        BeanUtils.copyProperties(productProInfoEntity, productProInfoVo);
+        ProductProInfoEntity  proInfoEntity = productProInfoMapper.selectById(proId);
+        BeanUtils.copyProperties(proInfoEntity, productProInfoVo);
         return productProInfoVo;
     }
 

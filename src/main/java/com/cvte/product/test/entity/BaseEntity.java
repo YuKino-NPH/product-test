@@ -1,9 +1,6 @@
 package com.cvte.product.test.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -48,7 +45,7 @@ public abstract class BaseEntity {
     @ApiModelProperty(value = "是否删除")
     private Integer isDelete;
 
-    @TableField()
+    @Version
     @ApiModelProperty(value = "版本号")
     private Integer version;
 }

@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(description="返回给前端的产品信息数据")
-public class ProductProInfoVo {
+public class ProductProInfoVo extends BaseVo{
     @ApiModelProperty(value = "产品代码")
     @TableId(value = "pro_id", type = IdType.ASSIGN_UUID)
     private String proId;
@@ -42,7 +42,4 @@ public class ProductProInfoVo {
 
     @ApiModelProperty(value = "三级分类-小类")
     private String proThreeCategory;
-    private String updUser;
-    private String updName;
-    private String updHost;
 }

@@ -1,18 +1,21 @@
 package com.cvte.product.test.enums;
 
+import lombok.Data;
+
 /**
  * @author cvte
- * @date 2022/8/9 9:24 AM
+ * @date 2022/8/9 3:38 PM
  */
-public enum ProductProInfoVerificationErrorEnum {
-    PRODUCT_ID_NULL_ERROR(4000003, "ID不能为空"),
-    PAGE_DATA_ERROR(4000003, "分页参数错误"),
-    LIFE_CYCLE_ERROR(4000003, "生命周期参数不符合规范");
-
+public enum ProductCustomerMatchResponseErrorEnum {
+    SELECT_ERROR(4000003,"模块不存在"),
+    INSERT_EXIST_ERROR(4000003,"该产品信息已存在"),
+    INSERT_ERROR(5000001,"系统错误"),
+    DELETE_ERROR(4000003,"模块ID错误"),UPDATE_ERROR(4000003,"模块更新失败"),
+    ;
     private Integer code;
     private String msg;
 
-    ProductProInfoVerificationErrorEnum(Integer code, String msg) {
+    ProductCustomerMatchResponseErrorEnum(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
@@ -35,7 +38,7 @@ public enum ProductProInfoVerificationErrorEnum {
 
     @Override
     public String toString() {
-        return "ProductProInfoVerificationErrorEnum{" +
+        return "UserResponseEnum{" +
                 "code=" + code +
                 ", msg='" + msg + '\'' +
                 '}';
