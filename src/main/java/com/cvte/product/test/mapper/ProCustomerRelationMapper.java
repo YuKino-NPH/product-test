@@ -1,8 +1,10 @@
 package com.cvte.product.test.mapper;
 
-import com.cvte.product.test.entity.ProCustomerRelation;
+import com.cvte.product.test.entity.ProCustomerRelationEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -13,6 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2022-08-09
  */
 @Mapper
-public interface ProCustomerRelationMapper extends BaseMapper<ProCustomerRelation> {
-
+public interface ProCustomerRelationMapper extends BaseMapper<ProCustomerRelationEntity> {
 }

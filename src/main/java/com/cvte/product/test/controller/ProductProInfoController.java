@@ -10,8 +10,6 @@ import com.cvte.product.test.service.ProductProInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * <p>
  * 产品信息 前端控制器
@@ -57,9 +55,9 @@ public class ProductProInfoController {
      * @return: com.cvte.product.test.Vo.ResultVo
      **/
     @PostMapping()
-    public ResultVo insertProduct(@RequestBody ProductProInfoVo productProInfoVo, HttpServletRequest request){
-        productProInfoService.insertProduct(productProInfoVo, productProInfoVo.getUpdHost());
-        return ResultVo.ok();
+    public ResultVo insertProduct(@RequestBody ProductProInfoVo productProInfoVo){
+        ProductProInfoVo proInfoVo = productProInfoService.insertProduct(productProInfoVo);
+        return ResultVo.ok().put(proInfoVo);
     }
     /**
      * @description: 根据产品ID逻辑删除产品信息

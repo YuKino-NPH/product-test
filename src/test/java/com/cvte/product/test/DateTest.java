@@ -1,9 +1,10 @@
 package com.cvte.product.test;
 
+import com.cvte.product.test.Vo.ProductProInfoVo;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author cvte
@@ -12,6 +13,11 @@ import java.util.Date;
 public class DateTest {
     @Test
     public void test1(){
-
+        System.out.println(UUID.randomUUID());
+        System.out.println(UUID.randomUUID());
+    }
+    @Test
+    public void test2(){
+        System.out.println(new Date().toString());
     }
 }

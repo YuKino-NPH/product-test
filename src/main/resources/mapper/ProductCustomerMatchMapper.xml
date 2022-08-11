@@ -1,5 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cvte.product.test.mapper.ProductCustomerMatchMapper">
+    <select id="selectProIdsByFuzzyMatch" resultType="string">
+        select pro_id
+        from part_module_relation
+            left join product_customer_match
+                on part_module_relation.customer_module_id=product_customer_match.module_id
+            left join pro_customer_relation
+                on product_customer_match.module_id=pro_customer_relation.module_id
+        where
+        <trim suffixOverrides="and">
+            <if test="moduleName!=null and moduleName!=''">
+                module_name=#{moduleName} and
+            </if>
+            <if test="customerName!=null and customerName!=''">
+                customer_name=#{customerName} and
+            </if>
+            <if test="partNumId!=null and partNumId!=''">
+                part_num_id=#{partNumId} and
+            </if>
+            <if test="customerBatchNums!=null and customerBatchNums[0]!=''">
+                customer_batch_num in
+                <foreach collection="customerBatchNums" item="customerBatchNum" separator="," open="(" close=")">
+                    #{customerBatchNum}
+                </foreach>
+                and
+            </if>
+            <if test="country!=null and country!=''">
+                country like '%'||#{country}||'%' and
+            </if>
+        </trim>
+    </select>
+
+    <select id="selectProIdsByFuzzyMatchNotPartNum" resultType="string">
+        select pro_id
+        from product_customer_match
+        left join pro_customer_relation
+        on product_customer_match.module_id=pro_customer_relation.module_id
+        where
+        <trim suffixOverrides="and">
+            <if test="moduleName!=null and moduleName!=''">
+                module_name=#{moduleName} and
+            </if>
+            <if test="customerName!=null and customerName!=''">
+                customer_name=#{customerName} and
+            </if>
+            <if test="customerBatchNums!=null and customerBatchNums[0]!=''">
+                customer_batch_num in
+                <foreach collection="customerBatchNums" item="customerBatchNum" separator="," open="(" close=")">
+                    #{customerBatchNum}
+                </foreach>
+                and
+            </if>
+            <if test="country!=null and country!=''">
+                country like '%'||#{country}||'%' and
+            </if>
+        </trim>
+    </select>
 
 </mapper>

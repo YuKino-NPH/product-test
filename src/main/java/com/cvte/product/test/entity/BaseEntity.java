@@ -43,9 +43,9 @@ public abstract class BaseEntity {
 
     @TableLogic
     @ApiModelProperty(value = "是否删除")
-    private Integer isDelete;
+    private Integer isDeleted;
 
     @Version
     @ApiModelProperty(value = "版本号")
-    private Integer version;
+    private Long version;
 }

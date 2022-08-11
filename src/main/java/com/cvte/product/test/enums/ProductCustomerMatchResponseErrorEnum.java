@@ -11,6 +11,9 @@ public enum ProductCustomerMatchResponseErrorEnum {
     INSERT_EXIST_ERROR(4000003,"该产品信息已存在"),
     INSERT_ERROR(5000001,"系统错误"),
     DELETE_ERROR(4000003,"模块ID错误"),UPDATE_ERROR(4000003,"模块更新失败"),
+    SELECT_FUZZY_MATCH_ERROR(4000003,"没有产品信息"),
+    SELECT_FUZZY_NOT_PARAMETER(4000003,"不能无参数传入"),
+    INSERT_NOT_PARAMETER(4000003,"参数不完整")
     ;
     private Integer code;
     private String msg;

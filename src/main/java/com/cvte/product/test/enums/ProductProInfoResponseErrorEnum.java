@@ -10,8 +10,10 @@ public enum ProductProInfoResponseErrorEnum {
     SELECT_ERROR(4000003,"产品不存在"),INSERT_EXIST_ERROR(4000003,"该产品信息已存在"),
     DELETE_ERROR(4000003,"产品代码错误"),UPDATE_ERROR(4000003,"产品更新失败"),
     INSERT_LIFECYCLE_ERROR(4000003,"产品生命周期状态错误"),
+    INSERT_PARAMETER_ERROR(4000003,"传参错误"),
     INSERT_ERROR(5000001,"系统错误"),
-    VERIFICATION_ERROR(4000002,"数据校验失败");
+    VERIFICATION_ERROR(4000002,"数据校验失败"),
+    PART_BATCH_INSERT_ERROR(5000003,"批量插入客户料号关联表失败");
     private Integer code;
     private String msg;
 

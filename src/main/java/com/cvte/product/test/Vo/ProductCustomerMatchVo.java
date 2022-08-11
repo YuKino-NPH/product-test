@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * @author 聂裴涵
  * @date 2022/8/9 3:02 PM
@@ -23,7 +25,7 @@ public class ProductCustomerMatchVo extends BaseVo {
     private String customerName;
 
     @ApiModelProperty(value = "客户料号")
-    private String customerPartNum;
+    private List<String> customerPartNums;
 
     @ApiModelProperty(value = "客户批次号")
     private String customerBatchNum;
@@ -33,5 +35,7 @@ public class ProductCustomerMatchVo extends BaseVo {
 
     @ApiModelProperty(value = "国家")
     private String country;
+    @ApiModelProperty(value = "产品ID")
+    private List<String> proIds;
 
 }

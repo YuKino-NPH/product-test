@@ -1,6 +1,6 @@
 package com.cvte.product.test.mapper;
 
-import com.cvte.product.test.entity.PartModuleRelation;
+import com.cvte.product.test.entity.PartModuleRelationEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2022-08-09
  */
 @Mapper
-public interface PartModuleRelationMapper extends BaseMapper<PartModuleRelation> {
+public interface PartModuleRelationMapper extends BaseMapper<PartModuleRelationEntity> {
 
 }

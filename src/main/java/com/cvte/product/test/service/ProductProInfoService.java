@@ -8,6 +8,8 @@ import com.cvte.product.test.entity.ProductProInfoEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cvte.product.test.exception.VerificationException;
 
+import java.util.ArrayList;
+
 /**
  * <p>
  * 产品信息 服务类
@@ -31,11 +33,13 @@ public interface ProductProInfoService extends IService<ProductProInfoEntity> {
      * @date: 2022/8/8 3:36 PM
      * @return: void
      **/
-    void insertProduct(ProductProInfoVo productProInfoVo,String host);
+    ProductProInfoVo insertProduct(ProductProInfoVo productProInfoVo);
 
     void deleteProductByProId(String proId) throws VerificationException;
 
     ProductProInfoVo updateProductByProId(String proId, ProductProInfoVo productProInfoVo);
 
     ProductProInfoVo getProductById(String proId);
+
+    void insertBatch(ArrayList<ProductProInfoVo> productProInfoVos);
 }

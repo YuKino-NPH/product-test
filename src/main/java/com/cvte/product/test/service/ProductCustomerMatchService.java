@@ -1,9 +1,12 @@
 package com.cvte.product.test.service;
 
 import com.cvte.product.test.Vo.ProductCustomerMatchVo;
+import com.cvte.product.test.Vo.ProductProInfoVo;
 import com.cvte.product.test.common.MyPage;
 import com.cvte.product.test.entity.ProductCustomerMatchEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -19,9 +22,13 @@ public interface ProductCustomerMatchService extends IService<ProductCustomerMat
 
     ProductCustomerMatchVo getModuleById(String moduleId);
 
-    void insertModule(ProductCustomerMatchVo productCustomerMatchVo, String updHost);
+    ProductCustomerMatchVo insertModule(ProductCustomerMatchVo productCustomerMatchVo);
 
     void deleteModuleById(String moduleId);
 
     ProductCustomerMatchVo updateModuleById(String moduleId, ProductCustomerMatchVo productCustomerMatchVo);
+
+    List<ProductProInfoVo> getProductFuzzyMatch(String customerName, String customerPartNum, String customerBatchNum, String country, String moduleName);
+
+    void insertModuleBatch(List<ProductCustomerMatchVo> productCustomerMatchVos, String s);
 }

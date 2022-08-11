@@ -1,9 +1,10 @@
 package com.cvte.product.test.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,8 +20,9 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
+@TableName(value = "part_module_relation")
 @ApiModel(value="PartModuleRelation对象", description="客户产品模版与客户料号关系表")
-public class PartModuleRelation extends BaseEntity implements Serializable {
+public class PartModuleRelationEntity extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

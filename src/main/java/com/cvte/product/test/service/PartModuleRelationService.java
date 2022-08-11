@@ -1,7 +1,10 @@
 package com.cvte.product.test.service;
 
-import com.cvte.product.test.entity.PartModuleRelation;
+import com.cvte.product.test.Vo.ProductCustomerMatchVo;
+import com.cvte.product.test.entity.PartModuleRelationEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -11,6 +14,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author 聂裴涵
  * @since 2022-08-09
  */
-public interface PartModuleRelationService extends IService<PartModuleRelation> {
+public interface PartModuleRelationService extends IService<PartModuleRelationEntity> {
 
+    void insert(ProductCustomerMatchVo productCustomerMatchVo, String moduleId);
+
+    void insertBatch(List<ProductCustomerMatchVo> productCustomerMatchVos);
+
+    void updatePartNums(ProductCustomerMatchVo productCustomerMatchVo);
 }

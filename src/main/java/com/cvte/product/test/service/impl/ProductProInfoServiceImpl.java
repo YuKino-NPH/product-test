@@ -14,11 +14,14 @@ import com.cvte.product.test.exception.VerificationException;
 import com.cvte.product.test.mapper.ProductProInfoMapper;
 import com.cvte.product.test.service.ProductProInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cvte.product.test.utils.BaseVoToBaseEntityUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,6 +107,21 @@ public class ProductProInfoServiceImpl extends ServiceImpl<ProductProInfoMapper,
         return productProInfoVo;
     }
 
+    @Override
+    public void insertBatch(ArrayList<ProductProInfoVo> productProInfoVos) {
+        List<ProductProInfoEntity> productProInfoEntities = productProInfoVos.stream().map(item -> {
+            ProductProInfoEntity productProInfoEntity = new ProductProInfoEntity();
+            productProInfoEntity.setVersion(1L);
+            productProInfoEntity.setIsDeleted(0);
+            BeanUtils.copyProperties(item, productProInfoEntity);
+            productProInfoEntity.setCrtHost(productProInfoEntity.getUpdHost());
+            productProInfoEntity.setCrtName(productProInfoEntity.getUpdName());
+            productProInfoEntity.setCrtUser(productProInfoEntity.getUpdUser());
+            return productProInfoEntity;
+        }).collect(Collectors.toList());
+        this.saveBatch(productProInfoEntities);
+    }
+
 
     /**
      * @description: 插入产品数据
@@ -112,28 +130,38 @@ public class ProductProInfoServiceImpl extends ServiceImpl<ProductProInfoMapper,
      * @return: void
      **/
     @Override
-    public void insertProduct(ProductProInfoVo productProInfoVo, String host) {
-        //判断产品是否存在
+    @Transactional(rollbackFor = {CustomGlobalException.class})
+    public ProductProInfoVo insertProduct(ProductProInfoVo productProInfoVo) {
+        // 判断参数合法性
+        boolean isVerification=StringUtils.hasLength(productProInfoVo.getLifeCycle())&&StringUtils.hasLength(productProInfoVo.getProModel())
+                &&StringUtils.hasLength(productProInfoVo.getProType())&&StringUtils.hasLength(productProInfoVo.getProName())
+                &&StringUtils.hasLength(productProInfoVo.getProOneCategory())&&StringUtils.hasLength(productProInfoVo.getSaleModel())
+                &&StringUtils.hasLength(productProInfoVo.getProTwoCategory())&&StringUtils.hasLength(productProInfoVo.getUpdUser())
+                &&StringUtils.hasLength(productProInfoVo.getUpdHost())&&StringUtils.hasLength(productProInfoVo.getUpdName());
+        if (!isVerification){
+            throw new VerificationException(ProductProInfoResponseErrorEnum.INSERT_PARAMETER_ERROR.getCode(), ProductProInfoResponseErrorEnum.INSERT_PARAMETER_ERROR.getMsg());
+        }
+        // 判断产品是否存在
         if (productProInfoMapper.selectCount(new QueryWrapper<ProductProInfoEntity>().eq("pro_name", productProInfoVo.getProName())) > 0) {
-            throw new CustomGlobalException(ProductProInfoResponseErrorEnum.INSERT_EXIST_ERROR.getCode(), ProductProInfoResponseErrorEnum.INSERT_EXIST_ERROR.getMsg());
+            throw new VerificationException(ProductProInfoResponseErrorEnum.INSERT_EXIST_ERROR.getCode(), ProductProInfoResponseErrorEnum.INSERT_EXIST_ERROR.getMsg());
         }
-        //判断传入的产品生命周期是否符合标准
+        // 判断传入的产品生命周期是否符合标准
         if (!commonConfig.getStatus().contains(productProInfoVo.getLifeCycle())) {
-            throw new CustomGlobalException(ProductProInfoResponseErrorEnum.INSERT_LIFECYCLE_ERROR.getCode(), ProductProInfoResponseErrorEnum.INSERT_LIFECYCLE_ERROR.getMsg());
+            throw new VerificationException(ProductProInfoResponseErrorEnum.INSERT_LIFECYCLE_ERROR.getCode(), ProductProInfoResponseErrorEnum.INSERT_LIFECYCLE_ERROR.getMsg());
         }
-        productProInfoVo.setUpdHost(host);
+
         ProductProInfoEntity productProInfoEntity = new ProductProInfoEntity();
-        productProInfoEntity.setVersion(1);
-        productProInfoEntity.setIsDelete(0);
+        productProInfoEntity.setVersion(1L);
+        productProInfoEntity.setIsDeleted(0);
         BeanUtils.copyProperties(productProInfoVo, productProInfoEntity);
-        productProInfoEntity.setCrtHost(host);
-        productProInfoEntity.setCrtName(productProInfoEntity.getUpdName());
-        productProInfoEntity.setCrtUser(productProInfoEntity.getUpdUser());
+        BaseVoToBaseEntityUtil.baseVoToBaseEntityInsert(productProInfoVo,productProInfoEntity);
 
         int changedRows = productProInfoMapper.insert(productProInfoEntity);
         if (changedRows < 1) {
             throw new CustomGlobalException(ProductProInfoResponseErrorEnum.INSERT_ERROR.getCode(), ProductProInfoResponseErrorEnum.INSERT_ERROR.getMsg());
         }
+        productProInfoVo.setProId(productProInfoEntity.getProId());
+        return productProInfoVo;
 
     }
 
@@ -170,6 +198,7 @@ public class ProductProInfoServiceImpl extends ServiceImpl<ProductProInfoMapper,
         }
         ProductProInfoEntity productProInfoEntity = productProInfoMapper.selectById(proId);
         BeanUtils.copyProperties(productProInfoVo, productProInfoEntity);
+        productProInfoEntity.setProId(proId);
         int changedRows = productProInfoMapper.updateById(productProInfoEntity);
         if (changedRows < 1) {
             throw new CustomGlobalException(ProductProInfoResponseErrorEnum.UPDATE_ERROR.getCode(), ProductProInfoResponseErrorEnum.UPDATE_ERROR.getMsg());
