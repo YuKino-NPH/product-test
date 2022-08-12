@@ -97,11 +97,7 @@ public class ProductCustomerMatchServiceImpl extends ServiceImpl<ProductCustomer
             return productCustomerMatchVo;
         }).collect(Collectors.toList());
         productCustomerMatchVoMyPage.setList(productCustomerMatchVos);
-        MyPage.Pagination pagination = productCustomerMatchVoMyPage.getPagination();
-        pagination.setPageNum(iPage.getCurrent());
-        pagination.setTotal(iPage.getTotal());
-        pagination.setPages(iPage.getPages());
-        pagination.setPageSize(iPage.getSize());
+        productCustomerMatchVoMyPage.setPaginationByIPage(iPage);
         return productCustomerMatchVoMyPage;
     }
 
@@ -244,10 +240,10 @@ public class ProductCustomerMatchServiceImpl extends ServiceImpl<ProductCustomer
         // 动态拼接参数，查出产品ID
         List<String> proIdList;
 
+        // 没有PartNum就无需连接表PartProduct查询
         if (!StringUtils.hasLength(customerPartNum)) {
             proIdList=productCustomerMatchMapper.selectProIdsByFuzzyMatchNotPartNum(moduleName, customerName, customerBatchNums, country);
         } else {
-            // 动态拼接参数，查出产品ID
             proIdList = productCustomerMatchMapper.selectProIdsByFuzzyMatch(moduleName, customerName, customerPartNum, customerBatchNums, country);
         }
         if (proIdList.size()<1){

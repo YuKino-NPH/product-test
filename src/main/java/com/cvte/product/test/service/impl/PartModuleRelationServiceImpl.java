@@ -43,11 +43,10 @@ public class PartModuleRelationServiceImpl extends ServiceImpl<PartModuleRelatio
      **/
     @Override
     public void insert(ProductCustomerMatchVo productCustomerMatchVo, String moduleId) {
-        boolean isVerification= StringUtils.hasLength(moduleId)&&productCustomerMatchVo.getCustomerPartNums()!=null;
-        if (!isVerification){
+        boolean isVerification = StringUtils.hasLength(moduleId) && productCustomerMatchVo.getCustomerPartNums() != null;
+        if (!isVerification) {
             throw new VerificationException(ProductCustomerMatchResponseErrorEnum.INSERT_ERROR.getCode(), ProductCustomerMatchResponseErrorEnum.INSERT_ERROR.getMsg());
         }
-        ArrayList<PartModuleRelationEntity> partModuleRelationEntities = new ArrayList<>();
         List<PartModuleRelationEntity> moduleRelationEntities = productCustomerMatchVo.getCustomerPartNums().stream().map(item -> {
             PartModuleRelationEntity partModuleRelationEntity = new PartModuleRelationEntity();
             partModuleRelationEntity.setPartNumId(item);
@@ -73,15 +72,15 @@ public class PartModuleRelationServiceImpl extends ServiceImpl<PartModuleRelatio
     @Override
     public void insertBatch(List<ProductCustomerMatchVo> productCustomerMatchVos) {
         ArrayList<PartModuleRelationEntity> partModuleRelationEntities = new ArrayList<>();
-        productCustomerMatchVos.forEach(item->{
-            item.getCustomerPartNums().forEach(temp->{
+        productCustomerMatchVos.forEach(item -> {
+            item.getCustomerPartNums().forEach(temp -> {
                 PartModuleRelationEntity partModuleRelationEntity = new PartModuleRelationEntity();
                 partModuleRelationEntity.setPartNumId(temp);
                 partModuleRelationEntity.setCustomerModuleId(item.getModuleId());
 
                 partModuleRelationEntity.setVersion(1L);
                 partModuleRelationEntity.setIsDeleted(0);
-                BaseVoToBaseEntityUtil.baseVoToBaseEntityInsert(item,partModuleRelationEntity);
+                BaseVoToBaseEntityUtil.baseVoToBaseEntityInsert(item, partModuleRelationEntity);
                 partModuleRelationEntities.add(partModuleRelationEntity);
             });
         });

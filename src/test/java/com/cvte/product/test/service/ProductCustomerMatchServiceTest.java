@@ -4,6 +4,7 @@ import com.cvte.product.test.Vo.ProductCustomerMatchVo;
 import com.cvte.product.test.common.MyPage;
 import com.cvte.product.test.entity.ProductProInfoEntity;
 import com.cvte.product.test.exception.CustomGlobalException;
+import com.cvte.product.test.exception.VerificationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -200,10 +201,14 @@ public class ProductCustomerMatchServiceTest {
         String customerPartNum="38B25341";
         String customerBatchNum="7738DE63";
         String country="中国";
-        String moduleName="CVTE-0000952588";
+        String moduleName="CVTE-00001820368";
+
+        // 先进行一次查询，进行第一次查询的构建对象
+        productCustomerMatchService.getProductFuzzyMatch(customerName,null,null,null,null);
+        String customerName2="TCL+000247611";
         long time1 = System.currentTimeMillis();
         // 根据customerName 来查询
-        productCustomerMatchService.getProductFuzzyMatch(customerName,null,null,null,null);
+        productCustomerMatchService.getProductFuzzyMatch(customerName2,null,null,null,null);
         long time2 = System.currentTimeMillis();
         System.out.println("根据customerName查询耗时"+(time2-time1));
         // 根据 customerPartNum 来查询数据
@@ -227,7 +232,7 @@ public class ProductCustomerMatchServiceTest {
         // 只根据国家查询数据
         try {
             productCustomerMatchService.getProductFuzzyMatch(null,null,null,country,null);
-        }catch (CustomGlobalException e){
+        }catch (VerificationException e){
             System.out.println(e.getCode());
             System.out.println(e.getMsg());
         }

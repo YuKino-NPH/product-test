@@ -55,10 +55,10 @@ public class ProductProInfoServiceImpl extends ServiceImpl<ProductProInfoMapper,
         // 进行模糊查询字符串的拼接工作
         QueryWrapper<ProductProInfoEntity> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasLength(keyword)){
-            queryWrapper.like("pro_name",keyword).or().like("pro_model",keyword)
-                    .or().like("sale_model",keyword).or().like("pro_type",keyword)
-                    .or().like("life_cycle",keyword).or().like("pro_one_category",keyword)
-                    .or().like("pro_two_category",keyword).or().like("pro_three_category",keyword);
+            queryWrapper.eq("pro_name",keyword).or().eq("pro_model",keyword)
+                    .or().eq("sale_model",keyword).or().eq("pro_type",keyword)
+                    .or().eq("life_cycle",keyword).or().eq("pro_one_category",keyword)
+                    .or().eq("pro_two_category",keyword).or().eq("pro_three_category",keyword);
         }
         if ("DESC".equals(order)){
             queryWrapper.orderByDesc(orderBy);
@@ -77,12 +77,7 @@ public class ProductProInfoServiceImpl extends ServiceImpl<ProductProInfoMapper,
             return productProInfoVo;
         }).collect(Collectors.toList());
         proInfoVoMyPage.setList(proInfoVos);
-        MyPage.Pagination pagination = proInfoVoMyPage.getPagination();
-        pagination.setPageNum(iPage.getCurrent());
-        pagination.setTotal(iPage.getTotal());
-        pagination.setPages(iPage.getPages());
-        pagination.setPageSize(iPage.getSize());
-
+        proInfoVoMyPage.setPaginationByIPage(iPage);
         return proInfoVoMyPage;
     }
 
@@ -197,6 +192,9 @@ public class ProductProInfoServiceImpl extends ServiceImpl<ProductProInfoMapper,
             throw new VerificationException(ProductProInfoVerificationErrorEnum.LIFE_CYCLE_ERROR.getCode(), ProductProInfoVerificationErrorEnum.LIFE_CYCLE_ERROR.getMsg());
         }
         ProductProInfoEntity productProInfoEntity = productProInfoMapper.selectById(proId);
+        if (productProInfoEntity==null){
+            throw new CustomGlobalException(ProductProInfoResponseErrorEnum.UPDATE_ERROR.getCode(), ProductProInfoResponseErrorEnum.UPDATE_ERROR.getMsg());
+        }
         BeanUtils.copyProperties(productProInfoVo, productProInfoEntity);
         productProInfoEntity.setProId(proId);
         int changedRows = productProInfoMapper.updateById(productProInfoEntity);

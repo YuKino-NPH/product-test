@@ -1,5 +1,6 @@
 package com.cvte.product.test.common;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.Data;
 
 import java.util.List;
@@ -15,6 +16,12 @@ public class MyPage<T>{
 
     public MyPage() {
         pagination= new Pagination();
+    }
+    public void setPaginationByIPage(IPage iPage){
+        pagination.setPageNum(iPage.getCurrent());
+        pagination.setTotal(iPage.getTotal());
+        pagination.setPages(iPage.getPages());
+        pagination.setPageSize(iPage.getSize());
     }
 
     @Data

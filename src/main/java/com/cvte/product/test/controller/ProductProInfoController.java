@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-08-08
  */
 @RestController
-@RequestMapping("/product-pro-info/product")
+@RequestMapping("/product-pro-info")
 public class ProductProInfoController {
     @Autowired
     ProductProInfoService productProInfoService;
